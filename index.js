@@ -37,8 +37,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var puppeteer_1 = require("puppeteer");
+function isNumeric(num) {
+    return !isNaN(num);
+}
 (function () { return __awaiter(void 0, void 0, void 0, function () {
-    var browser, rounderpage, links, titles, authors, i, entryArray, _loop_1, lowestUnoccupied;
+    var browser, rounderpage, links, titles, authors, i, entryArray, _loop_1, lowestUnoccupied, usedSlots, index, pick, slotCycler, y, alterPoint;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, puppeteer_1.default.launch( /*{headless: false}*/)];
@@ -98,9 +101,9 @@ var puppeteer_1 = require("puppeteer");
                                 return [4 /*yield*/, entryPage.close()];
                             case 6:
                                 _b.sent();
-                                currentEntry = { title: titles[i], author: authors[i], slug: links[i], slotChoices: tempArray, finalSlot: null };
+                                currentEntry = { title: titles[i], author: authors[i], slug: links[i], slotChoices: ["8999", "8001", "8888", "<8x00"], finalSlot: NaN };
                                 entryArray.push(currentEntry);
-                                console.log("run " + i);
+                                console.log("Building entry " + (i + 1));
                                 i++;
                                 return [2 /*return*/];
                         }
@@ -114,10 +117,54 @@ var puppeteer_1 = require("puppeteer");
                 _a.sent();
                 return [3 /*break*/, 8];
             case 10:
-                console.log(entryArray[4].slotChoices[2]);
                 // Assign winner 8000; congrats!
                 entryArray[0].finalSlot = 8000;
                 lowestUnoccupied = 8001;
+                usedSlots = new Set();
+                usedSlots.add("8000");
+                // Start in second place, iterate through the array
+                for (index = 1; index < entryArray.length; index++) {
+                    //console.log(entryArray[index].title + "'s slot choices:")
+                    for (pick = 0; pick < entryArray[index].slotChoices.length; pick++) {
+                        //console.log(entryArray[index].slotChoices[pick])
+                        // Simple number case
+                        if (isNumeric(entryArray[index].slotChoices[pick])) {
+                            if (!usedSlots.has(entryArray[index].slotChoices[pick])) {
+                                entryArray[index].finalSlot = entryArray[index].slotChoices[pick];
+                                usedSlots.add(entryArray[index].slotChoices[pick]);
+                                break;
+                            }
+                            // console.log (entryArray[index].slotChoices[pick] + " Is a Number")
+                        }
+                        // Algorithmic case
+                        else if (entryArray[index].slotChoices[pick].charAt(0) == '<' || entryArray[index].slotChoices[pick].charAt(0) == '>') {
+                            console.log("algorithmic case " + entryArray[index].slotChoices[pick]);
+                            if (entryArray[index].slotChoices[pick].charAt(0) == '<') {
+                                slotCycler = entryArray[index].slotChoices[pick].substr(1, entryArray[index].slotChoices[pick].length);
+                                y = 0;
+                                alterPoint = slotCycler.indexOf("x");
+                                do {
+                                    console.log(slotCycler.substr(0, alterPoint));
+                                    console.log(y.toString());
+                                    console.log(slotCycler.substr(alterPoint + 1));
+                                    slotCycler = slotCycler.substr(0, alterPoint) + y.toString() + slotCycler.substr(alterPoint + 1);
+                                    console.log("testing slot " + slotCycler);
+                                    y++;
+                                } while (!usedSlots.has(slotCycler) || y < 2);
+                                if (!usedSlots.has(slotCycler)) {
+                                    entryArray[index].finalSlot = slotCycler;
+                                    usedSlots.add(slotCycler);
+                                    break;
+                                }
+                            }
+                            if (entryArray[index].slotChoices[pick].charAt(0) == '>') {
+                                // Highest case
+                            }
+                        }
+                        // Lowest occupied slot case
+                    }
+                    console.log(entryArray[index].title + "'s final slot is: " + entryArray[index].finalSlot);
+                }
                 return [4 /*yield*/, browser.close()];
             case 11:
                 _a.sent();

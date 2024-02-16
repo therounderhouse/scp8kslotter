@@ -1,11 +1,17 @@
 import puppeteer from 'puppeteer';
 
+type Optional<T> = T | null
+
 interface Entry {
-  title: string;
-  author: string;
-  slug: string;
-  slotChoices: [];
-  finalSlot: Number;
+  title: Optional<string>;
+  author: Optional<string>;
+  slug: Optional<string>;
+  slotChoices: any;
+  finalSlot: number;
+}
+
+function isNumeric(num){
+  return !isNaN(num)
 }
 
 (async () => {
@@ -38,7 +44,7 @@ interface Entry {
     // Create array of Entry objects and fill it with the previous arrays
 
     let i = 0;
-    let entryArray = [];
+    let entryArray: Entry[] = [];
     while (i < 6) {
       // console.log("#" + (i+1) + ": " + titles[i] + " by " + authors[i] + " (" + links[i] + ")")
       
@@ -51,34 +57,72 @@ interface Entry {
         return tempArray.map(td => td.textContent)
       });
       await entryPage.close();
-      let currentEntry = {title: titles[i], author: authors[i], slug: links[i], slotChoices: tempArray, finalSlot: null}
+      let currentEntry: Entry = {title: titles[i], author: authors[i], slug: links[i], slotChoices: ["8999", "8001", "8888", "<8x00"], finalSlot: NaN}
       entryArray.push(currentEntry)
-      console.log("run " + i)
+      console.log("Building entry " + (i+1))
       i++
     }
-    console.log(entryArray[4].slotChoices[2])
-
     // Assign winner 8000; congrats!
     entryArray[0].finalSlot = 8000
 
     // Iterate through array of Entry objects and determine each one's finalSlot value
     let lowestUnoccupied = 8001
+
+    // Create set to track used slots
+    const usedSlots = new Set();
+    usedSlots.add("8000")
+
     // Start in second place, iterate through the array
     for (let index = 1; index < entryArray.length; index++) {
 
-      for (let pick = 0; pick < entryArray[i].slotChoices.length; pick++) {
-        entryArray[index].slotChoices[pick]
+      //console.log(entryArray[index].title + "'s slot choices:")
+
+      for (let pick = 0; pick < entryArray[index].slotChoices.length; pick++) {
+        //console.log(entryArray[index].slotChoices[pick])
+        
         // Simple number case
-        if (parseInt(entryArray[index].slotChoices[pick]) == lowestUnoccupied) {
-          lowestUnoccupied++
-          entryArray[i].finalSlot = entryArray[index].slotChoices[pick]
-
-        }
-
-        // Lowest unoccupied slot case
+        if (isNumeric(entryArray[index].slotChoices[pick])) {
+          if(!usedSlots.has(entryArray[index].slotChoices[pick])) {
+            entryArray[index].finalSlot = entryArray[index].slotChoices[pick]
+            usedSlots.add(entryArray[index].slotChoices[pick])
+            break;
+          }
+          // console.log (entryArray[index].slotChoices[pick] + " Is a Number")
+        } 
 
         // Algorithmic case
+
+        else if (entryArray[index].slotChoices[pick].charAt(0) == '<' || entryArray[index].slotChoices[pick].charAt(0) == '>' ) {
+          console.log("algorithmic case " + entryArray[index].slotChoices[pick])
+          if (entryArray[index].slotChoices[pick].charAt(0) == '<') {
+            
+            let slotCycler = entryArray[index].slotChoices[pick].substr(1,entryArray[index].slotChoices[pick].length)
+            let y = 0;
+            let alterPoint = slotCycler.indexOf("x")
+            do {
+              console.log(slotCycler.substr(0, alterPoint))
+              console.log(y.toString())
+              console.log(slotCycler.substr(alterPoint + 1))
+              slotCycler = slotCycler.substr(0, alterPoint) + y.toString() + slotCycler.substr(alterPoint + 1)
+              console.log("testing slot " + slotCycler)
+              y++
+            } while(!usedSlots.has(slotCycler) || y < 2)
+            
+            if (!usedSlots.has(slotCycler)) {
+              entryArray[index].finalSlot = slotCycler;
+              usedSlots.add(slotCycler)
+              break;
+            }
+
+          }
+          if (entryArray[index].slotChoices[pick].charAt(0) == '>') {
+            // Highest case
+          }
+        }
+
+        // Lowest occupied slot case
       }
+      console.log(entryArray[index].title + "'s final slot is: " + entryArray[index].finalSlot)
     }
 
     await browser.close();
