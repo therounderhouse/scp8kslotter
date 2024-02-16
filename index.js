@@ -41,7 +41,7 @@ function isNumeric(num) {
     return !isNaN(num);
 }
 (function () { return __awaiter(void 0, void 0, void 0, function () {
-    var browser, rounderpage, links, titles, authors, i, entryArray, _loop_1, lowestUnoccupied, usedSlots, index, pick, slotCycler, y, alterPoint;
+    var browser, rounderpage, links, titles, authors, i, entryArray, _loop_1, lowestUnoccupied, usedSlots, index, pick, slotCycler, y, alterPoint, slotCycler, y, alterPoint;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, puppeteer_1.default.launch( /*{headless: false}*/)];
@@ -138,19 +138,22 @@ function isNumeric(num) {
                         }
                         // Algorithmic case
                         else if (entryArray[index].slotChoices[pick].charAt(0) == '<' || entryArray[index].slotChoices[pick].charAt(0) == '>') {
-                            console.log("algorithmic case " + entryArray[index].slotChoices[pick]);
+                            // console.log("algorithmic case " + entryArray[index].slotChoices[pick])
                             if (entryArray[index].slotChoices[pick].charAt(0) == '<') {
                                 slotCycler = entryArray[index].slotChoices[pick].substr(1, entryArray[index].slotChoices[pick].length);
                                 y = 0;
                                 alterPoint = slotCycler.indexOf("x");
                                 do {
-                                    console.log(slotCycler.substr(0, alterPoint));
-                                    console.log(y.toString());
-                                    console.log(slotCycler.substr(alterPoint + 1));
+                                    // console.log(slotCycler.substr(0, alterPoint));
+                                    // console.log(y.toString());
+                                    // console.log(slotCycler.substr(alterPoint + 1));
                                     slotCycler = slotCycler.substr(0, alterPoint) + y.toString() + slotCycler.substr(alterPoint + 1);
-                                    console.log("testing slot " + slotCycler);
+                                    // console.log("testing slot " + slotCycler);
                                     y++;
-                                } while (!usedSlots.has(slotCycler) || y < 2);
+                                    if (!usedSlots.has(slotCycler)) {
+                                        break;
+                                    }
+                                } while (y < 10);
                                 if (!usedSlots.has(slotCycler)) {
                                     entryArray[index].finalSlot = slotCycler;
                                     usedSlots.add(slotCycler);
@@ -158,7 +161,25 @@ function isNumeric(num) {
                                 }
                             }
                             if (entryArray[index].slotChoices[pick].charAt(0) == '>') {
-                                // Highest case
+                                slotCycler = entryArray[index].slotChoices[pick].substr(1, entryArray[index].slotChoices[pick].length);
+                                y = 9;
+                                alterPoint = slotCycler.indexOf("x");
+                                do {
+                                    // console.log(slotCycler.substr(0, alterPoint));
+                                    // console.log(y.toString());
+                                    // console.log(slotCycler.substr(alterPoint + 1));
+                                    slotCycler = slotCycler.substr(0, alterPoint) + y.toString() + slotCycler.substr(alterPoint + 1);
+                                    // console.log("testing slot " + slotCycler);
+                                    y--;
+                                    if (!usedSlots.has(slotCycler)) {
+                                        break;
+                                    }
+                                } while (y <= 0);
+                                if (!usedSlots.has(slotCycler)) {
+                                    entryArray[index].finalSlot = slotCycler;
+                                    usedSlots.add(slotCycler);
+                                    break;
+                                }
                             }
                         }
                         // Lowest occupied slot case

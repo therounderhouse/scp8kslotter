@@ -93,20 +93,24 @@ function isNumeric(num){
         // Algorithmic case
 
         else if (entryArray[index].slotChoices[pick].charAt(0) == '<' || entryArray[index].slotChoices[pick].charAt(0) == '>' ) {
-          console.log("algorithmic case " + entryArray[index].slotChoices[pick])
+          // console.log("algorithmic case " + entryArray[index].slotChoices[pick])
           if (entryArray[index].slotChoices[pick].charAt(0) == '<') {
-            
+
             let slotCycler = entryArray[index].slotChoices[pick].substr(1,entryArray[index].slotChoices[pick].length)
             let y = 0;
-            let alterPoint = slotCycler.indexOf("x")
+            let alterPoint = slotCycler.indexOf("x");
             do {
-              console.log(slotCycler.substr(0, alterPoint))
-              console.log(y.toString())
-              console.log(slotCycler.substr(alterPoint + 1))
-              slotCycler = slotCycler.substr(0, alterPoint) + y.toString() + slotCycler.substr(alterPoint + 1)
-              console.log("testing slot " + slotCycler)
-              y++
-            } while(!usedSlots.has(slotCycler) || y < 2)
+                // console.log(slotCycler.substr(0, alterPoint));
+                // console.log(y.toString());
+                // console.log(slotCycler.substr(alterPoint + 1));
+                slotCycler = slotCycler.substr(0, alterPoint) + y.toString() + slotCycler.substr(alterPoint + 1);
+                // console.log("testing slot " + slotCycler);
+                y++;
+                if(!usedSlots.has(slotCycler)) {
+                  break;
+                }
+            } while (y < 10);
+            
             
             if (!usedSlots.has(slotCycler)) {
               entryArray[index].finalSlot = slotCycler;
@@ -117,10 +121,34 @@ function isNumeric(num){
           }
           if (entryArray[index].slotChoices[pick].charAt(0) == '>') {
             // Highest case
+
+            let slotCycler = entryArray[index].slotChoices[pick].substr(1,entryArray[index].slotChoices[pick].length)
+            let y = 9;
+            let alterPoint = slotCycler.indexOf("x");
+            do {
+                // console.log(slotCycler.substr(0, alterPoint));
+                // console.log(y.toString());
+                // console.log(slotCycler.substr(alterPoint + 1));
+                slotCycler = slotCycler.substr(0, alterPoint) + y.toString() + slotCycler.substr(alterPoint + 1);
+                // console.log("testing slot " + slotCycler);
+                y--;
+                if(!usedSlots.has(slotCycler)) {
+                  break;
+                }
+            } while (y <= 0);
+            
+            
+            if (!usedSlots.has(slotCycler)) {
+              entryArray[index].finalSlot = slotCycler;
+              usedSlots.add(slotCycler)
+              break;
+            }
           }
         }
 
-        // Lowest occupied slot case
+        else {
+          
+        }
       }
       console.log(entryArray[index].title + "'s final slot is: " + entryArray[index].finalSlot)
     }
