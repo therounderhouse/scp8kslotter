@@ -41,114 +41,101 @@ function isNumeric(num) {
     return !isNaN(num);
 }
 (function () { return __awaiter(void 0, void 0, void 0, function () {
-    var browser, rounderpage, links, titles, authors, i, entryArray, _loop_1, lowestUnoccupied, usedSlots, index, pick, slotCycler, y, alterPoint, slotCycler, y, alterPoint;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var browser, rounderpage, links, titles, authors, i, entryArray, entryPage, tempArray, currentEntry, d, lowestUnoccupied, usedSlots, index, pick, slotCycler, y, alterPoint, slotCycler, y, alterPoint;
+    var _a, _b;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
             case 0: return [4 /*yield*/, puppeteer_1.default.launch( /*{headless: false}*/)];
             case 1:
-                browser = _a.sent();
+                browser = _c.sent();
                 return [4 /*yield*/, browser.newPage()];
             case 2:
-                rounderpage = _a.sent();
+                rounderpage = _c.sent();
                 return [4 /*yield*/, rounderpage.goto('https://scp-wiki.wikidot.com/rounderhouse-s-author-page')];
             case 3:
-                _a.sent();
+                _c.sent();
                 return [4 /*yield*/, rounderpage.setViewport({ width: 1080, height: 1024 })];
             case 4:
-                _a.sent();
+                _c.sent();
                 return [4 /*yield*/, rounderpage.evaluate(function () {
                         var links = Array.from(document.querySelectorAll('tbody tr td:nth-child(2) a'));
                         return links.map(function (td) { return td.getAttribute('href'); });
                     })];
             case 5:
-                links = _a.sent();
+                links = _c.sent();
                 return [4 /*yield*/, rounderpage.evaluate(function () {
                         var titles = Array.from(document.querySelectorAll('tbody tr td:nth-child(2)'));
                         return titles.map(function (td) { return td.textContent; });
                     })];
             case 6:
-                titles = _a.sent();
+                titles = _c.sent();
                 return [4 /*yield*/, rounderpage.evaluate(function () {
                         var authors = Array.from(document.querySelectorAll('tbody tr td:nth-child(3)'));
                         return authors.map(function (td) { return td.textContent; });
                     })];
             case 7:
-                authors = _a.sent();
+                authors = _c.sent();
                 i = 0;
                 entryArray = [];
-                _loop_1 = function () {
-                    var entryPage, tempArray, currentEntry;
-                    return __generator(this, function (_b) {
-                        switch (_b.label) {
-                            case 0: return [4 /*yield*/, browser.newPage()];
-                            case 1:
-                                entryPage = _b.sent();
-                                return [4 /*yield*/, entryPage.goto("https://scp-wiki.wikidot.com" + links[i])];
-                            case 2:
-                                _b.sent();
-                                return [4 /*yield*/, entryPage.waitForSelector('#discuss-button')];
-                            case 3:
-                                _b.sent();
-                                return [4 /*yield*/, entryPage.click('#discuss-button')];
-                            case 4:
-                                _b.sent();
-                                return [4 /*yield*/, entryPage.evaluate(function () {
-                                        tempArray = Array.from(document.querySelectorAll('.long ol li'));
-                                        return tempArray.map(function (td) { return td.textContent; });
-                                    })];
-                            case 5:
-                                tempArray = _b.sent();
-                                return [4 /*yield*/, entryPage.close()];
-                            case 6:
-                                _b.sent();
-                                currentEntry = { title: titles[i], author: authors[i], slug: links[i], slotChoices: ["8999", "8001", "8888", "<8x00"], finalSlot: NaN };
-                                entryArray.push(currentEntry);
-                                console.log("Building entry " + (i + 1));
-                                i++;
-                                return [2 /*return*/];
-                        }
-                    });
-                };
-                _a.label = 8;
+                _c.label = 8;
             case 8:
-                if (!(i < 6)) return [3 /*break*/, 10];
-                return [5 /*yield**/, _loop_1()];
+                if (!(i < 7)) return [3 /*break*/, 15];
+                return [4 /*yield*/, browser.newPage()];
             case 9:
-                _a.sent();
-                return [3 /*break*/, 8];
+                entryPage = _c.sent();
+                return [4 /*yield*/, entryPage.goto("https://scp-wiki.wikidot.com" + links[i])];
             case 10:
+                _c.sent();
+                return [4 /*yield*/, entryPage.waitForSelector('#discuss-button')];
+            case 11:
+                _c.sent();
+                return [4 /*yield*/, entryPage.click('#discuss-button')];
+            case 12:
+                _c.sent();
+                return [4 /*yield*/, entryPage.$$eval('.long .slots ol li', function (tempArray) {
+                        return tempArray.map(function (td) { return td.textContent; });
+                    })];
+            case 13:
+                tempArray = _c.sent();
+                return [4 /*yield*/, entryPage.close()];
+            case 14:
+                _c.sent();
+                currentEntry = { title: titles[i], author: authors[i], slug: links[i], slotChoices: tempArray, finalSlot: null };
+                entryArray.push(currentEntry);
+                i++;
+                return [3 /*break*/, 8];
+            case 15:
                 // Assign winner 8000; congrats!
                 entryArray[0].finalSlot = 8000;
+                d = new Date();
+                console.log("FINAL 8KCON SLOTS - (PROBABLY) ACCURATE TO " + d);
+                console.log("SCP-" + entryArray[0].finalSlot + " —— " + ((_a = entryArray[0].title) === null || _a === void 0 ? void 0 : _a.substring(11)) + " [Winner Winner Chicken Dinner]");
                 lowestUnoccupied = 8001;
                 usedSlots = new Set();
                 usedSlots.add("8000");
                 // Start in second place, iterate through the array
                 for (index = 1; index < entryArray.length; index++) {
-                    //console.log(entryArray[index].title + "'s slot choices:")
                     for (pick = 0; pick < entryArray[index].slotChoices.length; pick++) {
-                        //console.log(entryArray[index].slotChoices[pick])
+                        if (entryArray[index].slotChoices[pick] == "001") {
+                            entryArray[index].finalSlot = "001";
+                            break;
+                        }
                         // Simple number case
-                        if (isNumeric(entryArray[index].slotChoices[pick])) {
+                        else if (isNumeric(entryArray[index].slotChoices[pick]) || entryArray[index].slotChoices[pick] != "001") {
                             if (!usedSlots.has(entryArray[index].slotChoices[pick])) {
                                 entryArray[index].finalSlot = entryArray[index].slotChoices[pick];
                                 usedSlots.add(entryArray[index].slotChoices[pick]);
                                 break;
                             }
-                            // console.log (entryArray[index].slotChoices[pick] + " Is a Number")
                         }
                         // Algorithmic case
                         else if (entryArray[index].slotChoices[pick].charAt(0) == '<' || entryArray[index].slotChoices[pick].charAt(0) == '>') {
-                            // console.log("algorithmic case " + entryArray[index].slotChoices[pick])
                             if (entryArray[index].slotChoices[pick].charAt(0) == '<') {
                                 slotCycler = entryArray[index].slotChoices[pick].substr(1, entryArray[index].slotChoices[pick].length);
                                 y = 0;
-                                alterPoint = slotCycler.indexOf("x");
+                                alterPoint = slotCycler.indexOf("X");
                                 do {
-                                    // console.log(slotCycler.substr(0, alterPoint));
-                                    // console.log(y.toString());
-                                    // console.log(slotCycler.substr(alterPoint + 1));
                                     slotCycler = slotCycler.substr(0, alterPoint) + y.toString() + slotCycler.substr(alterPoint + 1);
-                                    // console.log("testing slot " + slotCycler);
                                     y++;
                                     if (!usedSlots.has(slotCycler)) {
                                         break;
@@ -163,13 +150,9 @@ function isNumeric(num) {
                             if (entryArray[index].slotChoices[pick].charAt(0) == '>') {
                                 slotCycler = entryArray[index].slotChoices[pick].substr(1, entryArray[index].slotChoices[pick].length);
                                 y = 9;
-                                alterPoint = slotCycler.indexOf("x");
+                                alterPoint = slotCycler.indexOf("X");
                                 do {
-                                    // console.log(slotCycler.substr(0, alterPoint));
-                                    // console.log(y.toString());
-                                    // console.log(slotCycler.substr(alterPoint + 1));
                                     slotCycler = slotCycler.substr(0, alterPoint) + y.toString() + slotCycler.substr(alterPoint + 1);
-                                    // console.log("testing slot " + slotCycler);
                                     y--;
                                     if (!usedSlots.has(slotCycler)) {
                                         break;
@@ -182,13 +165,18 @@ function isNumeric(num) {
                                 }
                             }
                         }
-                        // Lowest occupied slot case
+                        else {
+                            if (usedSlots.has(lowestUnoccupied)) {
+                                lowestUnoccupied++;
+                            }
+                            entryArray[index].finalSlot = lowestUnoccupied.toString();
+                        }
                     }
-                    console.log(entryArray[index].title + "'s final slot is: " + entryArray[index].finalSlot);
+                    console.log("SCP-" + entryArray[index].finalSlot + " —— " + ((_b = entryArray[index].title) === null || _b === void 0 ? void 0 : _b.substring(11)));
                 }
                 return [4 /*yield*/, browser.close()];
-            case 11:
-                _a.sent();
+            case 16:
+                _c.sent();
                 return [2 /*return*/];
         }
     });

@@ -7,7 +7,7 @@ interface Entry {
   author: Optional<string>;
   slug: Optional<string>;
   slotChoices: any;
-  finalSlot: number;
+  finalSlot: any;
 }
 
 function isNumeric(num){
@@ -45,26 +45,24 @@ function isNumeric(num){
 
     let i = 0;
     let entryArray: Entry[] = [];
-    while (i < 6) {
-      // console.log("#" + (i+1) + ": " + titles[i] + " by " + authors[i] + " (" + links[i] + ")")
-      
+    while (i < 7) {
       let entryPage = await browser.newPage();
       await entryPage.goto("https://scp-wiki.wikidot.com" + links[i])
       await entryPage.waitForSelector('#discuss-button')
       await entryPage.click('#discuss-button')
-      let tempArray = await entryPage.evaluate(() => {
-        tempArray = Array.from(document.querySelectorAll('.long ol li'))
-        return tempArray.map(td => td.textContent)
+      let tempArray = await entryPage.$$eval('.long .slots ol li', tempArray => {
+        return tempArray.map(td => td.textContent);
       });
       await entryPage.close();
-      let currentEntry: Entry = {title: titles[i], author: authors[i], slug: links[i], slotChoices: ["8999", "8001", "8888", "<8x00"], finalSlot: NaN}
+      let currentEntry: Entry = {title: titles[i], author: authors[i], slug: links[i], slotChoices: tempArray, finalSlot: null}
       entryArray.push(currentEntry)
-      console.log("Building entry " + (i+1))
       i++
     }
     // Assign winner 8000; congrats!
     entryArray[0].finalSlot = 8000
-
+    const d = new Date();
+    console.log("FINAL 8KCON SLOTS - (PROBABLY) ACCURATE TO " + d)
+    console.log("SCP-" +  entryArray[0].finalSlot + " —— " + entryArray[0].title?.substring(11) + " [Winner Winner Chicken Dinner]")
     // Iterate through array of Entry objects and determine each one's finalSlot value
     let lowestUnoccupied = 8001
 
@@ -75,36 +73,33 @@ function isNumeric(num){
     // Start in second place, iterate through the array
     for (let index = 1; index < entryArray.length; index++) {
 
-      //console.log(entryArray[index].title + "'s slot choices:")
 
       for (let pick = 0; pick < entryArray[index].slotChoices.length; pick++) {
-        //console.log(entryArray[index].slotChoices[pick])
         
+        if (entryArray[index].slotChoices[pick] == "001") {
+          entryArray[index].finalSlot = "001"
+          break
+        }
         // Simple number case
-        if (isNumeric(entryArray[index].slotChoices[pick])) {
+        else if (isNumeric(entryArray[index].slotChoices[pick]) || entryArray[index].slotChoices[pick] != "001") {
           if(!usedSlots.has(entryArray[index].slotChoices[pick])) {
             entryArray[index].finalSlot = entryArray[index].slotChoices[pick]
             usedSlots.add(entryArray[index].slotChoices[pick])
             break;
           }
-          // console.log (entryArray[index].slotChoices[pick] + " Is a Number")
         } 
 
         // Algorithmic case
 
         else if (entryArray[index].slotChoices[pick].charAt(0) == '<' || entryArray[index].slotChoices[pick].charAt(0) == '>' ) {
-          // console.log("algorithmic case " + entryArray[index].slotChoices[pick])
+
           if (entryArray[index].slotChoices[pick].charAt(0) == '<') {
 
             let slotCycler = entryArray[index].slotChoices[pick].substr(1,entryArray[index].slotChoices[pick].length)
             let y = 0;
-            let alterPoint = slotCycler.indexOf("x");
+            let alterPoint = slotCycler.indexOf("X");
             do {
-                // console.log(slotCycler.substr(0, alterPoint));
-                // console.log(y.toString());
-                // console.log(slotCycler.substr(alterPoint + 1));
                 slotCycler = slotCycler.substr(0, alterPoint) + y.toString() + slotCycler.substr(alterPoint + 1);
-                // console.log("testing slot " + slotCycler);
                 y++;
                 if(!usedSlots.has(slotCycler)) {
                   break;
@@ -124,13 +119,9 @@ function isNumeric(num){
 
             let slotCycler = entryArray[index].slotChoices[pick].substr(1,entryArray[index].slotChoices[pick].length)
             let y = 9;
-            let alterPoint = slotCycler.indexOf("x");
+            let alterPoint = slotCycler.indexOf("X");
             do {
-                // console.log(slotCycler.substr(0, alterPoint));
-                // console.log(y.toString());
-                // console.log(slotCycler.substr(alterPoint + 1));
                 slotCycler = slotCycler.substr(0, alterPoint) + y.toString() + slotCycler.substr(alterPoint + 1);
-                // console.log("testing slot " + slotCycler);
                 y--;
                 if(!usedSlots.has(slotCycler)) {
                   break;
@@ -147,10 +138,13 @@ function isNumeric(num){
         }
 
         else {
-          
+          if(usedSlots.has(lowestUnoccupied)) {
+            lowestUnoccupied++
+          }
+          entryArray[index].finalSlot = lowestUnoccupied.toString()
         }
       }
-      console.log(entryArray[index].title + "'s final slot is: " + entryArray[index].finalSlot)
+      console.log("SCP-" +  entryArray[index].finalSlot + " —— " + entryArray[index].title?.substring(11))
     }
 
     await browser.close();
