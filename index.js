@@ -91,75 +91,90 @@ function isNumeric(num) {
             }
         }
     }
-    var browser, rounderpage, links, titles, authors, i, entryArray, entryPage, tempArray, currentEntry, d, lowestUnoccupied, usedSlots, index, pick, fs, mdWrite;
-    var _a, _b;
-    return __generator(this, function (_c) {
-        switch (_c.label) {
+    var browser, rounderpage, links, titles, authors, i, entryArray, entryPage, tempArray, currentEntry, fs, d, mdWrite, lowestUnoccupied, usedSlots, index, pick;
+    var _a, _b, _c, _d;
+    return __generator(this, function (_e) {
+        switch (_e.label) {
             case 0: return [4 /*yield*/, puppeteer_1.default.launch( /*{headless: false}*/)];
             case 1:
-                browser = _c.sent();
+                browser = _e.sent();
                 return [4 /*yield*/, browser.newPage()];
             case 2:
-                rounderpage = _c.sent();
+                rounderpage = _e.sent();
                 return [4 /*yield*/, rounderpage.goto('https://scp-wiki.wikidot.com/rounderhouse-s-author-page')];
             case 3:
-                _c.sent();
+                _e.sent();
                 return [4 /*yield*/, rounderpage.setViewport({ width: 1080, height: 1024 })];
             case 4:
-                _c.sent();
+                _e.sent();
                 return [4 /*yield*/, rounderpage.evaluate(function () {
                         var links = Array.from(document.querySelectorAll('tbody tr td:nth-child(2) a'));
                         return links.map(function (td) { return td.getAttribute('href'); });
                     })];
             case 5:
-                links = _c.sent();
+                links = _e.sent();
                 return [4 /*yield*/, rounderpage.evaluate(function () {
                         var titles = Array.from(document.querySelectorAll('tbody tr td:nth-child(2)'));
                         return titles.map(function (td) { return td.textContent; });
                     })];
             case 6:
-                titles = _c.sent();
+                titles = _e.sent();
                 return [4 /*yield*/, rounderpage.evaluate(function () {
                         var authors = Array.from(document.querySelectorAll('tbody tr td:nth-child(3)'));
                         return authors.map(function (td) { return td.textContent; });
                     })];
             case 7:
-                authors = _c.sent();
+                authors = _e.sent();
                 i = 0;
                 entryArray = [];
-                _c.label = 8;
+                _e.label = 8;
             case 8:
-                if (!(i < 7)) return [3 /*break*/, 15];
+                if (!(i < 25)) return [3 /*break*/, 15];
                 return [4 /*yield*/, browser.newPage()];
             case 9:
-                entryPage = _c.sent();
+                entryPage = _e.sent();
                 return [4 /*yield*/, entryPage.goto("https://scp-wiki.wikidot.com" + links[i])];
             case 10:
-                _c.sent();
+                _e.sent();
                 return [4 /*yield*/, entryPage.waitForSelector('#discuss-button')];
             case 11:
-                _c.sent();
+                _e.sent();
                 return [4 /*yield*/, entryPage.click('#discuss-button')];
             case 12:
-                _c.sent();
+                _e.sent();
                 return [4 /*yield*/, entryPage.$$eval('.long .slots ol li', function (tempArray) {
                         return tempArray.map(function (td) { return td.textContent; });
                     })];
             case 13:
-                tempArray = _c.sent();
+                tempArray = _e.sent();
                 return [4 /*yield*/, entryPage.close()];
             case 14:
-                _c.sent();
+                _e.sent();
+                console.log("Building entry #" + i);
                 currentEntry = { title: titles[i], author: authors[i], slug: links[i], slotChoices: tempArray, finalSlot: null };
                 entryArray.push(currentEntry);
                 i++;
                 return [3 /*break*/, 8];
-            case 15:
+            case 15: return [4 /*yield*/, browser.close()];
+            case 16:
+                _e.sent();
+                fs = require('fs');
+                fs.open('readme.md', 'w', function (err, file) {
+                    if (err)
+                        throw err;
+                });
+                fs.writeFile('readme.md', '', function (err) { if (err) {
+                    console.log(err);
+                } });
                 // Assign winner 8000; congrats!
                 entryArray[0].finalSlot = 8000;
                 d = new Date();
                 console.log("FINAL 8KCON SLOTS - (PROBABLY) ACCURATE TO " + d);
                 console.log("SCP-" + entryArray[0].finalSlot + " —— " + ((_a = entryArray[0].title) === null || _a === void 0 ? void 0 : _a.substring(11)) + " [Winner Winner Chicken Dinner]");
+                mdWrite = ("# FINAL " + i + " 8KCON SLOTS - (PROBABLY) ACCURATE TO " + d + "\n ### Rerun every day by ROUNDERHOUSE, will get longer as more author posts are standardized.\n* SCP-" + entryArray[0].finalSlot + " —— " + ((_b = entryArray[0].title) === null || _b === void 0 ? void 0 : _b.substring(11)) + " [Winner Winner Chicken Dinner]\n");
+                fs.appendFile('readme.md', mdWrite, function (err) { if (err) {
+                    console.log(err);
+                } });
                 lowestUnoccupied = 8001;
                 usedSlots = new Set();
                 usedSlots.add("8000");
@@ -198,16 +213,12 @@ function isNumeric(num) {
                             }
                         }
                     }
-                    console.log("SCP-" + entryArray[index].finalSlot + " —— " + ((_b = entryArray[index].title) === null || _b === void 0 ? void 0 : _b.substring(11)));
+                    console.log("SCP-" + entryArray[index].finalSlot + " —— " + ((_c = entryArray[index].title) === null || _c === void 0 ? void 0 : _c.substring(11)) + " by " + entryArray[index].author);
+                    mdWrite = ("* SCP-" + entryArray[index].finalSlot + " —— " + ((_d = entryArray[index].title) === null || _d === void 0 ? void 0 : _d.substring(11)) + " by " + entryArray[index].author + "\n");
+                    fs.appendFile('readme.md', mdWrite, function (err) { if (err) {
+                        console.log(err);
+                    } });
                 }
-                return [4 /*yield*/, browser.close()];
-            case 16:
-                _c.sent();
-                fs = require('fs');
-                mdWrite = '* Shittle\n';
-                fs.appendFile('listing.md', mdWrite, function (err) { if (err) {
-                    console.log(err);
-                } });
                 return [2 /*return*/];
         }
     });

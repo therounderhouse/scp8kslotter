@@ -102,7 +102,7 @@ function isNumeric(num){
 
     let i = 0;
     let entryArray: Entry[] = [];
-    while (i < 7) {
+    while (i < 25) {
       let entryPage = await browser.newPage();
       await entryPage.goto("https://scp-wiki.wikidot.com" + links[i])
       await entryPage.waitForSelector('#discuss-button')
@@ -111,18 +111,28 @@ function isNumeric(num){
         return tempArray.map(td => td.textContent);
       });
       await entryPage.close();
+      console.log("Building entry #" + i)
       let currentEntry: Entry = {title: titles[i], author: authors[i], slug: links[i], slotChoices: tempArray, finalSlot: null}
       entryArray.push(currentEntry)
       i++
     }
 
+    await browser.close();
+
+    let fs = require('fs');
+    fs.open('readme.md', 'w', function (err, file) {
+      if (err) throw err;
+    }); 
+    fs.writeFile('readme.md', '', function(err){if (err) { console.log(err); } })
 
     // Assign winner 8000; congrats!
     entryArray[0].finalSlot = 8000
+    
     const d = new Date();
     console.log("FINAL 8KCON SLOTS - (PROBABLY) ACCURATE TO " + d)
     console.log("SCP-" +  entryArray[0].finalSlot + " —— " + entryArray[0].title?.substring(11) + " [Winner Winner Chicken Dinner]")
-    
+    let mdWrite = ("# FINAL " + i + " 8KCON SLOTS - (PROBABLY) ACCURATE TO " + d + "\n ### Rerun every day by ROUNDERHOUSE, will get longer as more author posts are standardized.\n* SCP-" +  entryArray[0].finalSlot + " —— " + entryArray[0].title?.substring(11) + " [Winner Winner Chicken Dinner]\n")
+    fs.appendFile('readme.md', mdWrite, (err) => { if (err) { console.log(err); } }); 
     
     // Iterate through array of Entry objects and determine each one's finalSlot value
     let lowestUnoccupied = 8001
@@ -166,16 +176,9 @@ function isNumeric(num){
           if (entryArray[index].finalSlot != undefined) {break}
         }
       }
-      console.log("SCP-" +  entryArray[index].finalSlot + " —— " + entryArray[index].title?.substring(11))
+      console.log("SCP-" +  entryArray[index].finalSlot + " —— " + entryArray[index].title?.substring(11) + " by " + entryArray[index].author)
+      mdWrite = ("* SCP-" +  entryArray[index].finalSlot + " —— " + entryArray[index].title?.substring(11) + " by " + entryArray[index].author + "\n")
+      fs.appendFile('readme.md', mdWrite, (err) => { if (err) { console.log(err); } }); 
     }
-
-    await browser.close();
-
-
-
-    let fs = require('fs');
-    let mdWrite = '* Shittle\n'
-
-    fs.appendFile('listing.md', mdWrite, (err) => { if (err) { console.log(err); } }); 
 
   })();
