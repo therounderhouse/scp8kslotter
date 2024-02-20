@@ -131,9 +131,11 @@ function isNumeric(num){
     const d = new Date();
     console.log("FINAL 8KCON SLOTS - (PROBABLY) ACCURATE TO " + d)
     console.log("SCP-" +  entryArray[0].finalSlot + " —— " + entryArray[0].title?.substring(11) + " by " + entryArray[0].author + " [Winner Winner Chicken Dinner]")
-    let mdWrite = ("# FINAL " + i + " 8KCON SLOTS - (PROBABLY) ACCURATE TO " + d + "\n ### Rerun every day by ROUNDERHOUSE, will get longer as more author posts are standardized.\n* SCP-" +  entryArray[0].finalSlot + " —— " + entryArray[0].title?.substring(11) + " [Winner Winner Chicken Dinner]\n")
+    let mdWrite = ("# FINAL " + i + " 8KCON SLOTS - (PROBABLY) ACCURATE TO " + d + "\n ### Rerun every day by ROUNDERHOUSE, will get longer as more author posts are standardized.\n")
     fs.appendFile('readme.md', mdWrite, (err) => { if (err) { console.log(err); } }); 
-    
+
+    mdWrite = ("* SCP-" +  entryArray[0].finalSlot + " —— " + entryArray[0].title?.substring(11) + " **[Winner Winner Chicken Dinner]**\n")
+    fs.appendFile('readme.md', mdWrite, (err) => { if (err) { console.log(err); } }); 
     // Iterate through array of Entry objects and determine each one's finalSlot value
     let lowestUnoccupied = 8001
 
