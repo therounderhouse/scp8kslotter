@@ -1,8 +1,14 @@
-# FINAL 25 8KCON SLOTS - (PROBABLY) ACCURATE TO Mon Feb 19 2024 20:02:23 GMT-0600 (Central Standard Time)
+# FINAL 25 8KCON SLOTS - (PROBABLY) ACCURATE TO Mon Feb 19 2024 20:19:49 GMT-0600 (Central Standard Time)
  ### Rerun every day by ROUNDERHOUSE, will get longer as more author posts are standardized.
-* SCP-8000 —— Feeding the Trolls [Winner Winner Chicken Dinner]
+I'll be abusing my mod powers to edit everyone's author posts but if you'd like to save me the trouble feel free. Just slap your entries into the following format in your author post; these are example values:
+> [[div class="slots"]]
+> # 8069
+> # 8420
+> # >80X0
+> [[/div]]
+That last one is an example of an algorithmic choice for the lowest 80X0 value -- the > signifies the lowest, the X is the variable you can stick wherever. You can also do >80X0 for the *highest* 80X0 value.* SCP-8500 —— WTH_LUV_FRM_ADA.zip by IronShears
+* SCP-8000 —— Feeding the Trolls **[Winner Winner Chicken Dinner]**
 * SCP-8999 —— The Seal of Approval by PlaguePJP
-* SCP-8500 —— WTH_LUV_FRM_ADA.zip by IronShears
 * SCP-8320 —— Seven Hundred Million Wizards by Raddagher
 * SCP-8001 —— Burial Goods by Grigori Karpin
 * SCP-8002 —— Maslov's Fire by bigslothonmyface

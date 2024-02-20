@@ -171,7 +171,15 @@ function isNumeric(num) {
                 d = new Date();
                 console.log("FINAL 8KCON SLOTS - (PROBABLY) ACCURATE TO " + d);
                 console.log("SCP-" + entryArray[0].finalSlot + " —— " + ((_a = entryArray[0].title) === null || _a === void 0 ? void 0 : _a.substring(11)) + " by " + entryArray[0].author + " [Winner Winner Chicken Dinner]");
-                mdWrite = ("# FINAL " + i + " 8KCON SLOTS - (PROBABLY) ACCURATE TO " + d + "\n ### Rerun every day by ROUNDERHOUSE, will get longer as more author posts are standardized.\n* SCP-" + entryArray[0].finalSlot + " —— " + ((_b = entryArray[0].title) === null || _b === void 0 ? void 0 : _b.substring(11)) + " [Winner Winner Chicken Dinner]\n");
+                mdWrite = ("# FINAL " + i + " 8KCON SLOTS - (PROBABLY) ACCURATE TO " + d + "\n ### Rerun every day by ROUNDERHOUSE, will get longer as more author posts are standardized.\n");
+                fs.appendFile('readme.md', mdWrite, function (err) { if (err) {
+                    console.log(err);
+                } });
+                mdWrite = ("I'll be abusing my mod powers to edit everyone's author posts but if you'd like to save me the trouble feel free. Just slap your entries into the following format in your author post; these are example values:\n> [[div class=\"slots\"]]\n> # 8069\n> # 8420\n> # >80X0\n> [[/div]]\nThat last one is an example of an algorithmic choice for the lowest 80X0 value -- the > signifies the lowest, the X is the variable you can stick wherever. You can also do >80X0 for the *highest* 80X0 value.");
+                fs.appendFile('readme.md', mdWrite, function (err) { if (err) {
+                    console.log(err);
+                } });
+                mdWrite = ("* SCP-" + entryArray[0].finalSlot + " —— " + ((_b = entryArray[0].title) === null || _b === void 0 ? void 0 : _b.substring(11)) + " **[Winner Winner Chicken Dinner]**\n");
                 fs.appendFile('readme.md', mdWrite, function (err) { if (err) {
                     console.log(err);
                 } });
