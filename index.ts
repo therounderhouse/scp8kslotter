@@ -1,4 +1,5 @@
 import puppeteer from 'puppeteer';
+import * as fs from 'node:fs';
 
 type Optional<T> = T | null
 
@@ -14,7 +15,63 @@ function isNumeric(num){
   return !isNaN(num)
 }
 
+
 (async () => {
+
+  function proposalCase() {
+    return "001"
+  }
+  
+  function numericCase(str) {
+    if(!usedSlots.has(str)) {
+      usedSlots.add(str)
+      return str
+    }
+  }
+
+  function algorithmicCase(str) {
+
+    let slotCycler = str.substr(1,4)
+
+    if (str.charAt(0) == '<') {
+      let y = 0;
+      let limit = 9;
+      if (str.substr(6,5) == 'up to') { limit = str.charAt(str.length - 1)}
+      let alterPoint = slotCycler.indexOf("X");
+      do {
+          slotCycler = slotCycler.substr(0, alterPoint) + y.toString() + slotCycler.substr(alterPoint + 1);
+          y++;
+          if(!usedSlots.has(slotCycler)) {
+            break;
+          }
+      } while (y <= limit);
+      
+      if (!usedSlots.has(slotCycler)) {
+        usedSlots.add(slotCycler)
+        return slotCycler;
+      }
+    }
+    if (str.charAt(0) == '>') {
+      let y = 9
+      let limit = 0;
+      if (str.substr(6,5) == 'down to') { limit = str.charAt(str.length - 1)}
+      let alterPoint = slotCycler.indexOf("X");
+      do {
+          slotCycler = slotCycler.substr(0, alterPoint) + y.toString() + slotCycler.substr(alterPoint + 1);
+          y--;
+          if(!usedSlots.has(slotCycler)) {
+            break;
+          }
+      } while (y >= limit);
+      
+      
+      if (!usedSlots.has(slotCycler)) {
+        usedSlots.add(slotCycler)
+        return slotCycler;
+      }
+    }
+  }
+
   // Open ROUNDERPAGE in a puppeteer browser
 
     const browser = await puppeteer.launch(/*{headless: false}*/);
@@ -58,11 +115,15 @@ function isNumeric(num){
       entryArray.push(currentEntry)
       i++
     }
+
+
     // Assign winner 8000; congrats!
     entryArray[0].finalSlot = 8000
     const d = new Date();
     console.log("FINAL 8KCON SLOTS - (PROBABLY) ACCURATE TO " + d)
     console.log("SCP-" +  entryArray[0].finalSlot + " —— " + entryArray[0].title?.substring(11) + " [Winner Winner Chicken Dinner]")
+    
+    
     // Iterate through array of Entry objects and determine each one's finalSlot value
     let lowestUnoccupied = 8001
 
@@ -76,76 +137,45 @@ function isNumeric(num){
 
       for (let pick = 0; pick < entryArray[index].slotChoices.length; pick++) {
         
+        // 001 case
         if (entryArray[index].slotChoices[pick] == "001") {
-          entryArray[index].finalSlot = "001"
-          break
+          entryArray[index].finalSlot = proposalCase()
+          if (entryArray[index].finalSlot != undefined) {break}
         }
-        // Simple number case
-        else if (isNumeric(entryArray[index].slotChoices[pick]) || entryArray[index].slotChoices[pick] != "001") {
-          if(!usedSlots.has(entryArray[index].slotChoices[pick])) {
-            entryArray[index].finalSlot = entryArray[index].slotChoices[pick]
-            usedSlots.add(entryArray[index].slotChoices[pick])
-            break;
-          }
+
+        // Numeric case
+
+        else if (isNumeric(entryArray[index].slotChoices[pick]) && entryArray[index].slotChoices[pick] != "001") {
+          entryArray[index].finalSlot = numericCase(entryArray[index].slotChoices[pick])
+          if (entryArray[index].finalSlot != undefined) {break}
         } 
 
         // Algorithmic case
 
         else if (entryArray[index].slotChoices[pick].charAt(0) == '<' || entryArray[index].slotChoices[pick].charAt(0) == '>' ) {
-
-          if (entryArray[index].slotChoices[pick].charAt(0) == '<') {
-
-            let slotCycler = entryArray[index].slotChoices[pick].substr(1,entryArray[index].slotChoices[pick].length)
-            let y = 0;
-            let alterPoint = slotCycler.indexOf("X");
-            do {
-                slotCycler = slotCycler.substr(0, alterPoint) + y.toString() + slotCycler.substr(alterPoint + 1);
-                y++;
-                if(!usedSlots.has(slotCycler)) {
-                  break;
-                }
-            } while (y < 10);
-            
-            
-            if (!usedSlots.has(slotCycler)) {
-              entryArray[index].finalSlot = slotCycler;
-              usedSlots.add(slotCycler)
-              break;
-            }
-
-          }
-          if (entryArray[index].slotChoices[pick].charAt(0) == '>') {
-            // Highest case
-
-            let slotCycler = entryArray[index].slotChoices[pick].substr(1,entryArray[index].slotChoices[pick].length)
-            let y = 9;
-            let alterPoint = slotCycler.indexOf("X");
-            do {
-                slotCycler = slotCycler.substr(0, alterPoint) + y.toString() + slotCycler.substr(alterPoint + 1);
-                y--;
-                if(!usedSlots.has(slotCycler)) {
-                  break;
-                }
-            } while (y <= 0);
-            
-            
-            if (!usedSlots.has(slotCycler)) {
-              entryArray[index].finalSlot = slotCycler;
-              usedSlots.add(slotCycler)
-              break;
-            }
-          }
+          entryArray[index].finalSlot = algorithmicCase(entryArray[index].slotChoices[pick])
+          if (entryArray[index].finalSlot != undefined) {break}
         }
 
+        // Fallback -- lowest unoccupied case
         else {
           if(usedSlots.has(lowestUnoccupied)) {
             lowestUnoccupied++
           }
           entryArray[index].finalSlot = lowestUnoccupied.toString()
+          if (entryArray[index].finalSlot != undefined) {break}
         }
       }
       console.log("SCP-" +  entryArray[index].finalSlot + " —— " + entryArray[index].title?.substring(11))
     }
 
     await browser.close();
+
+
+
+    let fs = require('fs');
+    let mdWrite = '* Shittle\n'
+
+    fs.appendFile('listing.md', mdWrite, (err) => { if (err) { console.log(err); } }); 
+
   })();

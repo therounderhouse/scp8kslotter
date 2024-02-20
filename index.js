@@ -41,7 +41,57 @@ function isNumeric(num) {
     return !isNaN(num);
 }
 (function () { return __awaiter(void 0, void 0, void 0, function () {
-    var browser, rounderpage, links, titles, authors, i, entryArray, entryPage, tempArray, currentEntry, d, lowestUnoccupied, usedSlots, index, pick, slotCycler, y, alterPoint, slotCycler, y, alterPoint;
+    function proposalCase() {
+        return "001";
+    }
+    function numericCase(str) {
+        if (!usedSlots.has(str)) {
+            usedSlots.add(str);
+            return str;
+        }
+    }
+    function algorithmicCase(str) {
+        var slotCycler = str.substr(1, 4);
+        if (str.charAt(0) == '<') {
+            var y = 0;
+            var limit = 9;
+            if (str.substr(6, 5) == 'up to') {
+                limit = str.charAt(str.length - 1);
+            }
+            var alterPoint = slotCycler.indexOf("X");
+            do {
+                slotCycler = slotCycler.substr(0, alterPoint) + y.toString() + slotCycler.substr(alterPoint + 1);
+                y++;
+                if (!usedSlots.has(slotCycler)) {
+                    break;
+                }
+            } while (y <= limit);
+            if (!usedSlots.has(slotCycler)) {
+                usedSlots.add(slotCycler);
+                return slotCycler;
+            }
+        }
+        if (str.charAt(0) == '>') {
+            var y = 9;
+            var limit = 0;
+            if (str.substr(6, 5) == 'down to') {
+                limit = str.charAt(str.length - 1);
+            }
+            var alterPoint = slotCycler.indexOf("X");
+            do {
+                slotCycler = slotCycler.substr(0, alterPoint) + y.toString() + slotCycler.substr(alterPoint + 1);
+                y--;
+                if (!usedSlots.has(slotCycler)) {
+                    break;
+                }
+            } while (y >= limit);
+            if (!usedSlots.has(slotCycler)) {
+                usedSlots.add(slotCycler);
+                return slotCycler;
+            }
+        }
+    }
+    var browser, rounderpage, links, titles, authors, i, entryArray, entryPage, tempArray, currentEntry, d, lowestUnoccupied, usedSlots, index, pick, fs, mdWrite;
     var _a, _b;
     return __generator(this, function (_c) {
         switch (_c.label) {
@@ -116,60 +166,36 @@ function isNumeric(num) {
                 // Start in second place, iterate through the array
                 for (index = 1; index < entryArray.length; index++) {
                     for (pick = 0; pick < entryArray[index].slotChoices.length; pick++) {
+                        // 001 case
                         if (entryArray[index].slotChoices[pick] == "001") {
-                            entryArray[index].finalSlot = "001";
-                            break;
+                            entryArray[index].finalSlot = proposalCase();
+                            if (entryArray[index].finalSlot != undefined) {
+                                break;
+                            }
                         }
-                        // Simple number case
-                        else if (isNumeric(entryArray[index].slotChoices[pick]) || entryArray[index].slotChoices[pick] != "001") {
-                            if (!usedSlots.has(entryArray[index].slotChoices[pick])) {
-                                entryArray[index].finalSlot = entryArray[index].slotChoices[pick];
-                                usedSlots.add(entryArray[index].slotChoices[pick]);
+                        // Numeric case
+                        else if (isNumeric(entryArray[index].slotChoices[pick]) && entryArray[index].slotChoices[pick] != "001") {
+                            entryArray[index].finalSlot = numericCase(entryArray[index].slotChoices[pick]);
+                            if (entryArray[index].finalSlot != undefined) {
                                 break;
                             }
                         }
                         // Algorithmic case
                         else if (entryArray[index].slotChoices[pick].charAt(0) == '<' || entryArray[index].slotChoices[pick].charAt(0) == '>') {
-                            if (entryArray[index].slotChoices[pick].charAt(0) == '<') {
-                                slotCycler = entryArray[index].slotChoices[pick].substr(1, entryArray[index].slotChoices[pick].length);
-                                y = 0;
-                                alterPoint = slotCycler.indexOf("X");
-                                do {
-                                    slotCycler = slotCycler.substr(0, alterPoint) + y.toString() + slotCycler.substr(alterPoint + 1);
-                                    y++;
-                                    if (!usedSlots.has(slotCycler)) {
-                                        break;
-                                    }
-                                } while (y < 10);
-                                if (!usedSlots.has(slotCycler)) {
-                                    entryArray[index].finalSlot = slotCycler;
-                                    usedSlots.add(slotCycler);
-                                    break;
-                                }
-                            }
-                            if (entryArray[index].slotChoices[pick].charAt(0) == '>') {
-                                slotCycler = entryArray[index].slotChoices[pick].substr(1, entryArray[index].slotChoices[pick].length);
-                                y = 9;
-                                alterPoint = slotCycler.indexOf("X");
-                                do {
-                                    slotCycler = slotCycler.substr(0, alterPoint) + y.toString() + slotCycler.substr(alterPoint + 1);
-                                    y--;
-                                    if (!usedSlots.has(slotCycler)) {
-                                        break;
-                                    }
-                                } while (y <= 0);
-                                if (!usedSlots.has(slotCycler)) {
-                                    entryArray[index].finalSlot = slotCycler;
-                                    usedSlots.add(slotCycler);
-                                    break;
-                                }
+                            entryArray[index].finalSlot = algorithmicCase(entryArray[index].slotChoices[pick]);
+                            if (entryArray[index].finalSlot != undefined) {
+                                break;
                             }
                         }
+                        // Fallback -- lowest unoccupied case
                         else {
                             if (usedSlots.has(lowestUnoccupied)) {
                                 lowestUnoccupied++;
                             }
                             entryArray[index].finalSlot = lowestUnoccupied.toString();
+                            if (entryArray[index].finalSlot != undefined) {
+                                break;
+                            }
                         }
                     }
                     console.log("SCP-" + entryArray[index].finalSlot + " —— " + ((_b = entryArray[index].title) === null || _b === void 0 ? void 0 : _b.substring(11)));
@@ -177,6 +203,11 @@ function isNumeric(num) {
                 return [4 /*yield*/, browser.close()];
             case 16:
                 _c.sent();
+                fs = require('fs');
+                mdWrite = '* Shittle\n';
+                fs.appendFile('listing.md', mdWrite, function (err) { if (err) {
+                    console.log(err);
+                } });
                 return [2 /*return*/];
         }
     });
