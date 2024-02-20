@@ -42,7 +42,7 @@ function isNumeric(num) {
 }
 (function () { return __awaiter(void 0, void 0, void 0, function () {
     function proposalCase() {
-        return "001";
+        return "001 Proposal";
     }
     function numericCase(str) {
         if (!usedSlots.has(str)) {
@@ -170,7 +170,7 @@ function isNumeric(num) {
                 entryArray[0].finalSlot = 8000;
                 d = new Date();
                 console.log("FINAL 8KCON SLOTS - (PROBABLY) ACCURATE TO " + d);
-                console.log("SCP-" + entryArray[0].finalSlot + " —— " + ((_a = entryArray[0].title) === null || _a === void 0 ? void 0 : _a.substring(11)) + " [Winner Winner Chicken Dinner]");
+                console.log("SCP-" + entryArray[0].finalSlot + " —— " + ((_a = entryArray[0].title) === null || _a === void 0 ? void 0 : _a.substring(11)) + " by " + entryArray[0].author + " [Winner Winner Chicken Dinner]");
                 mdWrite = ("# FINAL " + i + " 8KCON SLOTS - (PROBABLY) ACCURATE TO " + d + "\n ### Rerun every day by ROUNDERHOUSE, will get longer as more author posts are standardized.\n* SCP-" + entryArray[0].finalSlot + " —— " + ((_b = entryArray[0].title) === null || _b === void 0 ? void 0 : _b.substring(11)) + " [Winner Winner Chicken Dinner]\n");
                 fs.appendFile('readme.md', mdWrite, function (err) { if (err) {
                     console.log(err);

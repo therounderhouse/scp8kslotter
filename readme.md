@@ -1,4 +1,4 @@
-# FINAL 25 8KCON SLOTS - (PROBABLY) ACCURATE TO Mon Feb 19 2024 19:57:36 GMT-0600 (Central Standard Time)
+# FINAL 25 8KCON SLOTS - (PROBABLY) ACCURATE TO Mon Feb 19 2024 20:02:23 GMT-0600 (Central Standard Time)
  ### Rerun every day by ROUNDERHOUSE, will get longer as more author posts are standardized.
 * SCP-8000 —— Feeding the Trolls [Winner Winner Chicken Dinner]
 * SCP-8999 —— The Seal of Approval by PlaguePJP
@@ -14,7 +14,7 @@
 * SCP-8333 —— Wishweavers by Zyn
 * SCP-8140 —— A Book of Kings by Tufto
 * SCP-8060 —— Toontown by ratking666
-* SCP-001 —— Touching Eternity by OriTiefling
+* SCP-001 Proposal —— Touching Eternity by OriTiefling
 * SCP-8003 —— The Life and Death of Vincent Bohart by DodoDevil
 * SCP-8889 —— The Wondrous Wedding of William Wallace Wettle by LizardWizard
 * SCP-8400 —— THE PYROCLASM PROTOCOL by Dino--Draws

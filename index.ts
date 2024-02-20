@@ -19,7 +19,7 @@ function isNumeric(num){
 (async () => {
 
   function proposalCase() {
-    return "001"
+    return "001 Proposal"
   }
   
   function numericCase(str) {
@@ -130,7 +130,7 @@ function isNumeric(num){
     
     const d = new Date();
     console.log("FINAL 8KCON SLOTS - (PROBABLY) ACCURATE TO " + d)
-    console.log("SCP-" +  entryArray[0].finalSlot + " —— " + entryArray[0].title?.substring(11) + " [Winner Winner Chicken Dinner]")
+    console.log("SCP-" +  entryArray[0].finalSlot + " —— " + entryArray[0].title?.substring(11) + " by " + entryArray[0].author + " [Winner Winner Chicken Dinner]")
     let mdWrite = ("# FINAL " + i + " 8KCON SLOTS - (PROBABLY) ACCURATE TO " + d + "\n ### Rerun every day by ROUNDERHOUSE, will get longer as more author posts are standardized.\n* SCP-" +  entryArray[0].finalSlot + " —— " + entryArray[0].title?.substring(11) + " [Winner Winner Chicken Dinner]\n")
     fs.appendFile('readme.md', mdWrite, (err) => { if (err) { console.log(err); } }); 
     
