@@ -29,14 +29,45 @@ function isNumeric(num){
     }
   }
 
+
+  function palindromeCase(str) {
+    let palindromeCycler;
+    if(str == 'lowest') {
+      palindromeCycler = 8008;
+      while(usedSlots.has(palindromeCycler.toString()) && palindromeCycler <= 8998) {
+        palindromeCycler += 110;
+      }
+
+    }
+    else if(str == 'highest') {
+      palindromeCycler = 8998;
+      while(usedSlots.has(palindromeCycler.toString()) && palindromeCycler >= 8008) {
+        palindromeCycler -= 110;
+      }
+    }
+
+    if (!usedSlots.has(palindromeCycler.toString())) {
+      usedSlots.add(palindromeCycler.toString())
+      return palindromeCycler.toString()
+    }
+
+  }
+
   function algorithmicCase(str) {
 
     if (str.substr(0,6) == 'Lowest') {
+      if(str.substr(7, 10) == 'palindrome') {
+        return palindromeCase('lowest')
+      }
       let slotCycler = str.substr(7,4)
       let y = 0;
       let limit = 9;
-      if (str.substr(12,5) == 'up to') { limit = str.charAt(str.length - 1)}
       let alterPoint = slotCycler.indexOf("X");
+      if (str.substr(12,5) == 'up to') { 
+        let limitStr = str.charAt(str.length - 4)
+        limit = parseInt(limitStr.charAt(alterPoint))
+      }
+
       do {
           slotCycler = slotCycler.substr(0, alterPoint) + y.toString() + slotCycler.substr(alterPoint + 1);
           y++;
@@ -51,11 +82,17 @@ function isNumeric(num){
       }
     }
     if (str.substr(0,7) == 'Highest') {
+      if(str.substr(8, 10) == 'palindrome') {
+        return palindromeCase('highest')
+      }
       let slotCycler = str.substr(8,4)
       let y = 9
       let limit = 0;
-      if (str.substr(13,7) == 'down to') { limit = str.charAt(str.length - 1)}
       let alterPoint = slotCycler.indexOf("X");
+      if (str.substr(13,7) == 'up to') { 
+        let limitStr = str.charAt(str.length - 4)
+        limit = parseInt(limitStr.charAt(alterPoint))
+      }
       do {
           slotCycler = slotCycler.substr(0, alterPoint) + y.toString() + slotCycler.substr(alterPoint + 1);
           y--;
@@ -134,7 +171,7 @@ function isNumeric(num){
     let mdWrite = ("# FINAL " + i + " 8KCON SLOTS - (PROBABLY) ACCURATE TO " + d + "\n ### Rerun every day by ROUNDERHOUSE, will get longer as more author posts are standardized.\n")
     fs.appendFile('readme.md', mdWrite, (err) => { if (err) { console.log(err); } }); 
 
-    mdWrite = ("I'll be abusing my mod powers to edit everyone's author posts but if you'd like to save me the trouble feel free. Just slap your entries into the following format in your author post; these are example values:\n> [[div class=\"slots\"]]  \n> \\# 8069  \n> \\# 8420  \n> \\# >80X0  \n> [[/div]]  \n That last one is an example of an algorithmic choice for the lowest 80X0 value -- the > signifies the lowest, the X is the variable you can stick wherever. You can also do >80X0 for the *highest* 80X0 value. If you'd like a palindrome slot, I suggest you find god (I'm working on it).\n")
+    mdWrite = ("I'll be abusing my mod powers to edit everyone's author posts but if you'd like to save me the trouble feel free. Just slap your entries into the following format in your author post; these are example values:\n> [[div class=\"slots\"]]  \n> \\# 8069  \n> \\# 8420  \n> \\# Lowest palindrome  \n> \\# Lowest 80X0  \n> \\# Highest 8X00 down to 8700 \n> \\[[/div]]  \n The last two are an example of an algorithmic choice for the lowest 80X0 or highest 8X00 value -- the X is the variable you can stick wherever. You can also add the optional \"up to\" or \"down to\" phrasing, respectively, if you'd like to specify a limit.\n")
     fs.appendFile('readme.md', mdWrite, (err) => { if (err) { console.log(err); } }); 
 
     mdWrite = ("* SCP-" +  entryArray[0].finalSlot + " —— " + entryArray[0].title?.substring(11) + " **[Winner Winner Chicken Dinner]**\n")
@@ -173,7 +210,7 @@ function isNumeric(num){
           if (entryArray[index].finalSlot != undefined) {break}
         } 
 
-        // Algorithmic case
+        // Algorithmic & palindrome case
 
         else if (entryArray[index].slotChoices[pick].substr(0, 6) == 'Lowest' || entryArray[index].slotChoices[pick].substr(0, 7) == 'Highest' ) {
           entryArray[index].finalSlot = algorithmicCase(entryArray[index].slotChoices[pick])

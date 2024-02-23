@@ -1,14 +1,16 @@
-# FINAL 25 8KCON SLOTS - (PROBABLY) ACCURATE TO Thu Feb 22 2024 22:13:28 GMT-0600 (Central Standard Time)
+# FINAL 25 8KCON SLOTS - (PROBABLY) ACCURATE TO Thu Feb 22 2024 23:13:09 GMT-0600 (Central Standard Time)
  ### Rerun every day by ROUNDERHOUSE, will get longer as more author posts are standardized.
 I'll be abusing my mod powers to edit everyone's author posts but if you'd like to save me the trouble feel free. Just slap your entries into the following format in your author post; these are example values:
 > [[div class="slots"]]  
 > \# 8069  
 > \# 8420  
-> \# >80X0  
+> \# Lowest palindrome  
+> \# Lowest 80X0  
+> \# Highest 8X00 down to 8700  
 > [[/div]]  
- That last one is an example of an algorithmic choice for the lowest 80X0 value -- the > signifies the lowest, the X is the variable you can stick wherever. You can also do >80X0 for the *highest* 80X0 value. If you'd like a palindrome slot, I suggest you find god (I'm working on it).
-* SCP-8999 —— The Seal of Approval by PlaguePJP
+ The last two are an example of an algorithmic choice for the lowest 80X0 or highest 8X00 value -- the X is the variable you can stick wherever. You can also add the optional "up to" or "down to" phrasing, respectively, if you'd like to specify a limit.
 * SCP-8000 —— Feeding the Trolls **[Winner Winner Chicken Dinner]**
+* SCP-8999 —— The Seal of Approval by PlaguePJP
 * SCP-8500 —— WTH_LUV_FRM_ADA.zip by IronShears
 * SCP-8320 —— Seven Hundred Million Wizards by Raddagher
 * SCP-8001 —— Burial Goods by Grigori Karpin
@@ -27,8 +29,8 @@ I'll be abusing my mod powers to edit everyone's author posts but if you'd like 
 * SCP-8787 —— The Roast Not Taken by Ihp
 * SCP-8004 —— The Life and Death of Vincent Bohart by DodoDevil
 * SCP-8166 —— Eastward of Eden by AstersQuill
-* SCP-8889 —— The Wondrous Wedding of William Wallace Wettle by LizardWizard
 * SCP-8800 —— THE PYROCLASM PROTOCOL by Dino--Draws
+* SCP-8889 —— The Wondrous Wedding of William Wallace Wettle by LizardWizard
 * SCP-8100 —— TURTLE TIME by Harmacy
 * SCP-8006 —— Her Red Right Hand Protects Us by DrClef
 * SCP-8120 —— Bloodbound by Ralliston
