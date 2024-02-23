@@ -31,12 +31,11 @@ function isNumeric(num){
 
   function algorithmicCase(str) {
 
-    let slotCycler = str.substr(1,4)
-
-    if (str.charAt(0) == '<') {
+    if (str.substr(0,6) == 'Lowest') {
+      let slotCycler = str.substr(7,4)
       let y = 0;
       let limit = 9;
-      if (str.substr(6,5) == 'up to') { limit = str.charAt(str.length - 1)}
+      if (str.substr(12,5) == 'up to') { limit = str.charAt(str.length - 1)}
       let alterPoint = slotCycler.indexOf("X");
       do {
           slotCycler = slotCycler.substr(0, alterPoint) + y.toString() + slotCycler.substr(alterPoint + 1);
@@ -51,10 +50,11 @@ function isNumeric(num){
         return slotCycler;
       }
     }
-    if (str.charAt(0) == '>') {
+    if (str.substr(0,7) == 'Highest') {
+      let slotCycler = str.substr(8,4)
       let y = 9
       let limit = 0;
-      if (str.substr(6,5) == 'down to') { limit = str.charAt(str.length - 1)}
+      if (str.substr(13,7) == 'down to') { limit = str.charAt(str.length - 1)}
       let alterPoint = slotCycler.indexOf("X");
       do {
           slotCycler = slotCycler.substr(0, alterPoint) + y.toString() + slotCycler.substr(alterPoint + 1);
@@ -167,7 +167,7 @@ function isNumeric(num){
 
         // Algorithmic case
 
-        else if (entryArray[index].slotChoices[pick].charAt(0) == '<' || entryArray[index].slotChoices[pick].charAt(0) == '>' ) {
+        else if (entryArray[index].slotChoices[pick].substr(0, 6) == 'Lowest' || entryArray[index].slotChoices[pick].substr(0, 7) == 'Highest' ) {
           entryArray[index].finalSlot = algorithmicCase(entryArray[index].slotChoices[pick])
           if (entryArray[index].finalSlot != undefined) {break}
         }
