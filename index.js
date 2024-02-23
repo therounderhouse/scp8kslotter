@@ -51,11 +51,11 @@ function isNumeric(num) {
         }
     }
     function algorithmicCase(str) {
-        var slotCycler = str.substr(1, 4);
-        if (str.charAt(0) == '<') {
+        if (str.substr(0, 6) == 'Lowest') {
+            var slotCycler = str.substr(7, 4);
             var y = 0;
             var limit = 9;
-            if (str.substr(6, 5) == 'up to') {
+            if (str.substr(12, 5) == 'up to') {
                 limit = str.charAt(str.length - 1);
             }
             var alterPoint = slotCycler.indexOf("X");
@@ -71,10 +71,11 @@ function isNumeric(num) {
                 return slotCycler;
             }
         }
-        if (str.charAt(0) == '>') {
+        if (str.substr(0, 7) == 'Highest') {
+            var slotCycler = str.substr(8, 4);
             var y = 9;
             var limit = 0;
-            if (str.substr(6, 5) == 'down to') {
+            if (str.substr(13, 7) == 'down to') {
                 limit = str.charAt(str.length - 1);
             }
             var alterPoint = slotCycler.indexOf("X");
@@ -175,7 +176,7 @@ function isNumeric(num) {
                 fs.appendFile('readme.md', mdWrite, function (err) { if (err) {
                     console.log(err);
                 } });
-                mdWrite = ("I'll be abusing my mod powers to edit everyone's author posts but if you'd like to save me the trouble feel free. Just slap your entries into the following format in your author post; these are example values:\n> [[div class=\"slots\"]]\n \n> \\# 8069\n \n> \\# 8420\n \n> \\# >80X0\n \n> [[/div]]\n \n That last one is an example of an algorithmic choice for the lowest 80X0 value -- the > signifies the lowest, the X is the variable you can stick wherever. You can also do >80X0 for the *highest* 80X0 value. If you'd like a palindrome slot, I suggest you find god (I'm working on it).\n");
+                mdWrite = ("I'll be abusing my mod powers to edit everyone's author posts but if you'd like to save me the trouble feel free. Just slap your entries into the following format in your author post; these are example values:\n> [[div class=\"slots\"]]  \n> \\# 8069  \n> \\# 8420  \n> \\# >80X0  \n> [[/div]]  \n That last one is an example of an algorithmic choice for the lowest 80X0 value -- the > signifies the lowest, the X is the variable you can stick wherever. You can also do >80X0 for the *highest* 80X0 value. If you'd like a palindrome slot, I suggest you find god (I'm working on it).\n");
                 fs.appendFile('readme.md', mdWrite, function (err) { if (err) {
                     console.log(err);
                 } });
@@ -188,6 +189,14 @@ function isNumeric(num) {
                 usedSlots.add("8000");
                 // Start in second place, iterate through the array
                 for (index = 1; index < entryArray.length; index++) {
+                    // If the array is empty i.e. if no slots were listed, just assign it the lowest 
+                    if (entryArray[index].slotChoices.length == 0) {
+                        while (usedSlots.has(lowestUnoccupied.toString())) {
+                            lowestUnoccupied++;
+                        }
+                        entryArray[index].finalSlot = lowestUnoccupied.toString();
+                    }
+                    // For all other cases
                     for (pick = 0; pick < entryArray[index].slotChoices.length; pick++) {
                         // 001 case
                         if (entryArray[index].slotChoices[pick] == "001") {
@@ -204,7 +213,7 @@ function isNumeric(num) {
                             }
                         }
                         // Algorithmic case
-                        else if (entryArray[index].slotChoices[pick].charAt(0) == '<' || entryArray[index].slotChoices[pick].charAt(0) == '>') {
+                        else if (entryArray[index].slotChoices[pick].substr(0, 6) == 'Lowest' || entryArray[index].slotChoices[pick].substr(0, 7) == 'Highest') {
                             entryArray[index].finalSlot = algorithmicCase(entryArray[index].slotChoices[pick]);
                             if (entryArray[index].finalSlot != undefined) {
                                 break;
@@ -212,7 +221,7 @@ function isNumeric(num) {
                         }
                         // Fallback -- lowest unoccupied case
                         else {
-                            if (usedSlots.has(lowestUnoccupied)) {
+                            if (usedSlots.has(lowestUnoccupied.toString())) {
                                 lowestUnoccupied++;
                             }
                             entryArray[index].finalSlot = lowestUnoccupied.toString();

@@ -149,7 +149,15 @@ function isNumeric(num){
     // Start in second place, iterate through the array
     for (let index = 1; index < entryArray.length; index++) {
 
+      // If the array is empty i.e. if no slots were listed, just assign it the lowest 
+      if (entryArray[index].slotChoices.length == 0) {
+        while (usedSlots.has(lowestUnoccupied.toString())) {
+          lowestUnoccupied++
+        }
+        entryArray[index].finalSlot = lowestUnoccupied.toString()
+      }
 
+      // For all other cases
       for (let pick = 0; pick < entryArray[index].slotChoices.length; pick++) {
         
         // 001 case
@@ -174,7 +182,7 @@ function isNumeric(num){
 
         // Fallback -- lowest unoccupied case
         else {
-          if(usedSlots.has(lowestUnoccupied)) {
+          if(usedSlots.has(lowestUnoccupied.toString())) {
             lowestUnoccupied++
           }
           entryArray[index].finalSlot = lowestUnoccupied.toString()
