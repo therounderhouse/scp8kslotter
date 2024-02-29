@@ -203,7 +203,7 @@ function isNumeric(num) {
                 fs.appendFile('readme.md', mdWrite, function (err) { if (err) {
                     console.log(err);
                 } });
-                mdWrite = ("I'll be abusing my mod powers to edit everyone's author posts but if you'd like to save me the trouble feel free. Just slap your entries into the following format in your author post; these are example values:\n> [[div class=\"slots\"]]  \n> \\# 8069  \n> \\# 8420  \n> \\# Lowest palindrome  \n> \\# Lowest 80X0  \n> \\# Highest 8X00 down to 8700 \n> [[/div]]  \n The last two are an example of an algorithmic choice for the lowest 80X0 or highest 8X00 value -- the X is the variable you can stick wherever. You can also add the optional \"up to\" or \"down to\" phrasing, respectively, if you'd like to specify a limit.\n");
+                mdWrite = ("I'll be abusing my mod powers to edit everyone's author posts but if you'd like to save me the trouble feel free. Just slap your entries into the following format in your author post; these are example values:\n> [[div class=\"slots\"]]  \n> \\# 8069  \n> \\# 8420  \n> \\# Lowest palindrome  \n> \\# Lowest 80X0  \n> \\# Highest 8X00 down to 8700 \n> \\[[/div]]  \n The last two are an example of an algorithmic choice for the lowest 80X0 or highest 8X00 value -- the X is the variable you can stick wherever. You can also add the optional \"up to\" or \"down to\" phrasing, respectively, if you'd like to specify a limit.\n");
                 fs.appendFile('readme.md', mdWrite, function (err) { if (err) {
                     console.log(err);
                 } });
